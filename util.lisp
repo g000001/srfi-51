@@ -1,4 +1,4 @@
-(cl:in-package :srfi-51.internal)
+(cl:in-package "https://github.com/g000001/srfi-51#internals")
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (progn

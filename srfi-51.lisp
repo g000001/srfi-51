@@ -1,10 +1,7 @@
 ;;;; srfi-51.lisp
 
-(cl:in-package :srfi-51.internal)
+(cl:in-package "https://github.com/g000001/srfi-51#internals")
 
-(def-suite srfi-51)
-
-(in-suite srfi-51)
 
 (define-function (rest-values rest . default)
   (let* ((caller (if (or (null? default)

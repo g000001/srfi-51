@@ -1,8 +1,7 @@
-(cl:in-package :srfi-51.internal)
+(cl:in-package "https://github.com/g000001/srfi-51#internals")
 
-(def-suite srfi-51)
+(def-suite* srfi-51)
 
-(in-suite srfi-51)
 
 (defmacro => (&body body)
   (cl:loop

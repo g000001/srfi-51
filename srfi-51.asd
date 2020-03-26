@@ -2,7 +2,14 @@
 
 (cl:in-package :asdf)
 
+
 (defsystem :srfi-51
+  :version "20200327"
+  :description "SRFI 51 for CL: Handling rest list"
+  :long-description "SRFI 51 for CL: Handling rest list
+https://srfi.schemers.org/srfi-51"
+  :author "Joo ChurlSoo"
+  :maintainer "CHIBA Masaomi"
   :serial t
   :depends-on (:fiveam
                :mbe
@@ -14,11 +21,29 @@
                (:file "srfi-51")
                (:file "test")))
 
+
+(defmethod perform :after ((o load-op) (c (eql (find-system :srfi-51))))
+  (let ((name "https://github.com/g000001/srfi-51")
+        (nickname :srfi-51))
+    (if (and (find-package nickname)
+             (not (eq (find-package nickname)
+                      (find-package name))))
+        (warn "~A: A package with name ~A already exists." name nickname)
+        (rename-package name name `(,nickname)))))
+
+
 (defmethod perform ((o test-op) (c (eql (find-system :srfi-51))))
-  (load-system :srfi-51)
-  (or (flet ((_ (pkg sym)
-               (intern (symbol-name sym) (find-package pkg))))
-         (let ((result (funcall (_ :fiveam :run) (_ :srfi-51.internal :srfi-51))))
-           (funcall (_ :fiveam :explain!) result)
-           (funcall (_ :fiveam :results-status) result)))
-      (error "test-op failed") ))
+  (let ((*package*
+         (find-package
+          "https://github.com/g000001/srfi-51#internals")
+         #|(find-package :srfi-51.internal)|#))
+    (eval
+     (read-from-string
+      "
+      (or (let ((result (run 'srfi-51)))
+            (explain! result)
+            (results-status result))
+          (error \"test-op failed\") )"))))
+
+
+;;; *EOF*
